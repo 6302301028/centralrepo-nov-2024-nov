@@ -1,32 +1,38 @@
-1st line from mumbi    mavenCentral()
-}
+================================================================================
+================================================================================
 
-sourceSets {
-    main {
-        groovy {
-            srcDirs = ['src', 'vars']
-        }
-        resources {
-            srcDirs = ['resources']
-        }
-    }
-    test {
-        groovy {
-            srcDirs = ['test']
-        }
-    }
-}
+      2nd line from mumbai
+agent {
+    kubernetes {
+        defaultContainer 'kaniko'
+        yaml '''
+kind: Pod
+spec:
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    imagePullPolicy: Always
+    command:
+    - sleep
+    args:
+    - 99d
+    volumeMounts:
+      - name: aws-secret
+        mountPath: /root/.aws/
+      - name: docker-registry-config
+        mountPath: /kaniko/.docker
+  volumes:
+    - name: aws-secret
+      secret:
+        secretName: aws-secret
+    - name: docker-registry-config
+      configMap:
+        name: docker-registry-config
+'''
+   }
+You will need to create a secret aws-secret for Kaniko to be able to authenticate with ECR. This secret should contain the contents of ~/.aws/credentials. The other volume is a ConfigMap which should contain the endpoint of your ECR registry. For example:
 
-dependencies {
-    compile 'com.cloudbees:groovy-cps:1.22'
-    compile 'org.codehaus.groovy:groovy-all:2.4.12'
-
-    // https://github.com/jenkinsci/JenkinsPipelineUnit
-    testCompile 'com.lesfurets:jenkins-pipeline-unit:1.1'
-    testCompile 'junit:junit:4.12'
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
+{
+      "credHelpers": {
+        "<your-aws-account-id>.dkr.ecr.eu-central-1.amazonaws.com": "ecr-login"
+      }
