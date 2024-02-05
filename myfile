@@ -1,38 +1,14 @@
-================================================================================
-================================================================================
 
-      2nd line from mumbai
+=======================================================================================================
+=======================================================================================================
+
+     3rd line from mumbai
 agent {
-    kubernetes {
-        defaultContainer 'kaniko'
-        yaml '''
-kind: Pod
-spec:
-  containers:
-  - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug
-    imagePullPolicy: Always
-    command:
-    - sleep
-    args:
-    - 99d
-    volumeMounts:
-      - name: aws-secret
-        mountPath: /root/.aws/
-      - name: docker-registry-config
-        mountPath: /kaniko/.docker
-  volumes:
-    - name: aws-secret
-      secret:
-        secretName: aws-secret
-    - name: docker-registry-config
-      configMap:
-        name: docker-registry-config
-'''
-   }
-You will need to create a secret aws-secret for Kaniko to be able to authenticate with ECR. This secret should contain the contents of ~/.aws/credentials. The other volume is a ConfigMap which should contain the endpoint of your ECR registry. For example:
-
-{
-      "credHelpers": {
-        "<your-aws-account-id>.dkr.ecr.eu-central-1.amazonaws.com": "ecr-login"
-      }
+    dockerfile {
+        filename 'Dockerfile.build'
+        dir 'build'
+        label 'my-defined-label'
+        registryUrl 'https://myregistry.com/'
+        registryCredentialsId 'myPredefinedCredentialsInJenkins'
+    }
+}
