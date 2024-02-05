@@ -1,14 +1,15 @@
 
-=======================================================================================================
-=======================================================================================================
+==================================================================================================================
+==================================================================================================================
 
-     3rd line from mumbai
-agent {
-    dockerfile {
-        filename 'Dockerfile.build'
-        dir 'build'
-        label 'my-defined-label'
-        registryUrl 'https://myregistry.com/'
-        registryCredentialsId 'myPredefinedCredentialsInJenkins'
+         4th line from mumbai
+pipeline {
+    agent { docker 'maven:3.9.3-eclipse-temurin-17' } 
+    stages {
+        stage('Example Build') {
+            steps {
+                sh 'mvn -B clean verify'
+            }
+        }
     }
 }
