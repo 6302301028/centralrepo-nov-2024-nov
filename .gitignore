@@ -1,0 +1,23 @@
+agent {
+    node {
+        label 'my-defined-label'
+        customWorkspace '/some/other/path'
+    }
+}
+
+
+
+5th from the line mumbai
+
+============================================================================================
+============================================================================================
+
+
+
+agent {
+    node {
+        label 'my-defined-label'
+        customWorkspace '/some/other/path'
+    }
+}
+
